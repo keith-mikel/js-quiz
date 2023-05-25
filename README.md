@@ -4,7 +4,7 @@ This project is a Quiz that will test your knowledge on JavaScript, it was made 
 
 link to page:
 
-https://keith-mikel.github.io/js-quiz/
+https://keith-mikel.github.io/js-quiz/index_quiz
 
 ![alt text](./assets/images/javascript%20quiz.png)
 
