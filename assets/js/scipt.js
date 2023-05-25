@@ -15,7 +15,6 @@ var submitButton = document.querySelector('.submitButton')
 
 //set starting parameters
 var highScores = []
-
 var time = 75;
 var Timer;
 TimerEl.textContent = time;
@@ -134,10 +133,7 @@ answerButtons.forEach(button => {
   
       if(time < 1) {
         stopTime();
-        alert('You Lose! Click Okay to Try Again')
-        setTimeout(function() {
-          location.reload();
-      }, );
+        endQuiz();
       }
   
     }, 1000);
