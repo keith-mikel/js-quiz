@@ -7,14 +7,21 @@ var option1El = document.querySelector('#option1')
 var option2El = document.querySelector('#option2')
 var option3El = document.querySelector('#option3')
 var option4El = document.querySelector('#option4')
-var answerButton = document.querySelector('.answerButton')
+var answerButtons = document.querySelectorAll('.answerButton');
 var solution = document.querySelector('#solution')
+var submitForm = document.querySelector('.scoreSubmit')
+var submitButton = document.querySelector('.submitButton')
+
+
+//set starting parameters
+var highScores = []
 
 var time = 75;
-TimerEl.textContent = time
+var Timer;
+TimerEl.textContent = time;
 questionEl.textContent = 'Click Start Quiz'
 
-
+//quiz questions
 var quiz = {
   quizQuestions:[
   {
@@ -47,7 +54,7 @@ var quiz = {
   {
     question: "What does the NaN value represent in JavaScript?",
     answers: [
-      { answerText: "Not a Number' - indicating an invalid or unrepresentable numeric value.", isCorrect: true },
+      { answerText: "'Not a Number' - indicating an invalid or unrepresentable numeric value.", isCorrect: true },
       { answerText: "'Not a Null' - indicating the absence of a null value.", isCorrect: false },
       { answerText: "'Not a Name' - indicating an undefined or missing variable name.", isCorrect: false },
       { answerText: "'Not an Object' - indicating a variable that does not refer to an object.", isCorrect: false }
@@ -55,12 +62,20 @@ var quiz = {
   },
 ]
 }
-   
+
+//start quiz by unhiding the questions and setting progression, clicking the answer will progress the quiz
 
 function startQuiz() {
   var Q = 0;
+  startButton.setAttribute('style', 'display: none;')
+  option1El.setAttribute('style', '')
+  option2El.setAttribute('style', '')
+  option3El.setAttribute('style', '')
+  option4El.setAttribute('style', '')
+
 
   function updateQuestion() {
+    if (Q < 4) {
     questionEl.textContent = quiz.quizQuestions[Q].question;
 
     option1El.textContent = quiz.quizQuestions[Q].answers[0].answerText;
@@ -74,7 +89,20 @@ function startQuiz() {
 
     option4El.textContent = quiz.quizQuestions[Q].answers[3].answerText;
     option4El.setAttribute('data-isCorrect', quiz.quizQuestions[Q].answers[3].isCorrect);
+
+    console.log(Q);
+    }
+
+    //after the final question the quiz will end and time will stocp
+
+    else {
+      endQuiz();
+      stopTime();
+    };
+
   }
+
+  //function to deduct time for incorrect answers and progress the quiz by adding the Q variable as well as displaying if the answer was correct
 
   function onNextQuestion(event) {
     console.log(event.target.textContent)
@@ -83,7 +111,7 @@ function startQuiz() {
       solution.textContent = 'Correct!'
       
     } else {
-      solution.textContent = 'Wrong!'
+      solution.textContent = 'Wrong! You lose 10 seconds!'
       time -= 10;
     }
     Q++;
@@ -92,43 +120,83 @@ function startQuiz() {
 
   updateQuestion();
 
-  answerButton.addEventListener('click', onNextQuestion);
+answerButtons.forEach(button => {
+  button.addEventListener('click', onNextQuestion);
+});
 }
 
+//setting time and setting a condition that if time runs out an alert will show and the quiz will reset
 
   function setTime() {
-    // Sets interval in variable
-    var timerInterval = setInterval(function() {
+    Timer =setInterval(function() {
       time--;
       TimerEl.textContent = time;
   
-      if(time === 0) {
-        // Stops execution of action at set interval
-        clearInterval(timerInterval);
+      if(time < 1) {
+        stopTime();
+        alert('You Lose! Click Okay to Try Again')
+        setTimeout(function() {
+          location.reload();
+      }, );
       }
   
     }, 1000);
   };
 
+  //function to stop the time
+  function stopTime() {
+    clearInterval(Timer);
+  }
+
+  //after the final question the quiz will end by clearing the questions and showing the for for submitting score, score will be stored
+  function endQuiz() {
+
+    stopTime();
+
+    //stop score from going negative if last question is answered
+    if (time < 0) {
+      time = 0
+      TimerEl.textContent = 0
+    }
+
+    questionEl.textContent = 'You Scored '+time+ ' Enter your name for the High Scores!'
+    solution.textContent = ''
+    option1El.setAttribute('style', 'display: none;')
+    option1El.setAttribute('style', 'display: none;')
+    option2El.setAttribute('style', 'display: none;')
+    option3El.setAttribute('style', 'display: none;')
+    option4El.setAttribute('style', 'display: none;')
+    submitForm.setAttribute('style', '')
+
+    submitButton.addEventListener('click', function(event) {
+      event.preventDefault();
+
+      var nameInput = document.getElementById('name');
+      var name = nameInput.value;
+
+      highScores = localStorage.getItem('highScores')
+
+      highScores = highScores ? JSON.parse(highScores) : [];
+
+      highScores.push({nameNote: name, timeNote: time});
+
+      questionEl.textContent = 'You Score Has been submitted!'
+
+      highScores.sort(function(a, b) {
+        return b.timeNote - a.timeNote;
+      });
+
+      console.log(highScores);
+
+      localStorage.setItem('highScores', JSON.stringify(highScores));
+    })
+
+  }
+
+
+//function that start button will begin quiz and begin timer
   startButton.addEventListener('click', function() {
     setTime();
     startQuiz();
-  } 
+    }
   )
-
-
-
-
-// write out all questions and their answers in an array item 0 being the question and 1-4 answer
-// item 0 will be the OL item and the 4 answers will be the lis items
-
-//on selection of an answer it will determine if that answer was correct or not
-    // if correct quiz will move to next question, and display correct under quiz
-    // if incorrect the quiz will deduct 10 seconds and display incorrect
-
-// if the timer reaches 0 before the quiz is finished, it will bring you to a try again screen
-
-// if the quiz is completed the score will be calculated based on the remaining time
-     // high score form will be filled and stored in the high score list sorted by high to low score
-     // play again button will restart quiz
-     //clear high scores button will clear stored high scores

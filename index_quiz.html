@@ -17,16 +17,27 @@
     <!-- Box in middle of screen to display quiz -->
     <main>
         <section class="quizbox">
-            <h1>Quiz Box</h1>
+            <h1>JavaScript Review Quiz!</h1>
+
             <ul>
                 <li id='question'></li>
-                <li class="answerButton" id="option1" data-isCorrect=""></li>
-                <li class="answerButton" id="option2" data-isCorrect=""></li> 
-                <li class="answerButton" id="option3" data-isCorrect=""></li>
-                <li class="answerButton" id="option4" data-isCorrect=""></li> 
+                <li style="display: none;" class="answerButton" id="option1" data-isCorrect=""></li>
+                <li style="display: none;" class="answerButton" id="option2" data-isCorrect=""></li> 
+                <li style="display: none;" class="answerButton" id="option3" data-isCorrect=""></li>
+                <li style="display: none;" class="answerButton" id="option4" data-isCorrect=""></li> 
             </ul>
+
             <h2 id="solution"></h2>
-            <button id="startButton">Start Quiz</button>
+
+            <section class="scoreSubmit" style="display: none;">
+                <form>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <button class=submitButton type="submit">Submit</button>
+                  </form>
+            </section>
+
+            <button style='' id="startButton">Start Quiz</button>
         </section>
 
     <!-- area at top for the question -->
