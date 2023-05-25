@@ -11,6 +11,7 @@ var answerButtons = document.querySelectorAll('.answerButton');
 var solution = document.querySelector('#solution')
 var submitForm = document.querySelector('.scoreSubmit')
 var submitButton = document.querySelector('.submitButton')
+var tryAgainButton = document.querySelector('#tryAgainButton')
 
 
 //set starting parameters
@@ -185,10 +186,20 @@ answerButtons.forEach(button => {
       console.log(highScores);
 
       localStorage.setItem('highScores', JSON.stringify(highScores));
+
+      submitForm.setAttribute('style', 'display: none;')
+
+      tryAgainButton.setAttribute('style', '')
+
     })
 
   }
 
+//try again button
+
+tryAgainButton.addEventListener('click' , function() {
+  location.reload();
+});
 
 //function that start button will begin quiz and begin timer
   startButton.addEventListener('click', function() {
